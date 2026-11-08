@@ -14,10 +14,17 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
+    :root {
+      --aah-crimson: #880808;
+      --aah-scarlet: #c21c1c;
+      --aah-gold: #c5a880;
+      --aah-dark: #0a0405;
+    }
+
     body {
       font-family: 'Montserrat', sans-serif;
-      background: radial-gradient(ellipse at 50% 20%, #151b28 0%, #0c101a 50%, #06080d 100%);
-      color: #f1f5f9;
+      background: radial-gradient(ellipse at 50% 15%, #240a0e 0%, #120406 50%, #060102 100%);
+      color: #f8fafc;
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -25,6 +32,14 @@
     .font-cinzel { font-family: 'Cinzel', serif; }
     .font-serif-book { font-family: 'Cormorant Garamond', Georgia, serif; }
     .font-playfair { font-family: 'Playfair Display', serif; }
+
+    /* AAH Crimson & Gold Foil Text Glow */
+    .aah-gold-text {
+      background: linear-gradient(135deg, #fff4e0 0%, #dfb758 45%, #b2862c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 6px rgba(136, 8, 8, 0.4));
+    }
 
     /* 3D Book Icon Tilt on Hover */
     .book-card {
@@ -40,7 +55,7 @@
 
     .book-card:hover .book-3d-cover {
       transform: translateY(-8px) rotateY(-18deg) rotateX(4deg) scale(1.03);
-      box-shadow: -18px 25px 35px -8px rgba(0,0,0,0.85), 0 0 35px var(--glow-color, rgba(56, 189, 248, 0.35));
+      box-shadow: -18px 25px 35px -8px rgba(0,0,0,0.85), 0 0 35px var(--glow-color, rgba(194, 28, 28, 0.4));
     }
 
     /* Spine effect on card left */
@@ -50,7 +65,7 @@
       bottom: 0;
       left: 0;
       width: 12px;
-      background: linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(255,255,255,0.15) 50%, rgba(0,0,0,0.4) 100%);
+      background: linear-gradient(to right, rgba(0,0,0,0.65) 0%, rgba(255,255,255,0.18) 50%, rgba(0,0,0,0.45) 100%);
       border-right: 1px solid rgba(255,255,255,0.08);
       z-index: 10;
     }
@@ -64,30 +79,32 @@
     }
   </style>
 </head>
-<body class="relative flex flex-col justify-between selection:bg-cyan-900 selection:text-cyan-100">
+<body class="relative flex flex-col justify-between selection:bg-red-950 selection:text-red-100">
 
   <!-- Ambient Particle Glow Canvas -->
   <canvas id="libraryCanvas"></canvas>
 
-  <!-- Navigation / Header -->
-  <header class="relative z-10 px-6 sm:px-12 py-5 border-b border-slate-800/80 backdrop-blur-md bg-slate-950/60 flex items-center justify-between">
+  <!-- Navigation / Header (American Author Hub Themed) -->
+  <header class="relative z-10 px-6 sm:px-12 py-4 border-b border-red-900/40 backdrop-blur-md bg-black/60 flex items-center justify-between shadow-xl">
     <div class="flex items-center space-x-3.5">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-950 via-slate-900 to-sky-700 border border-cyan-500/40 flex items-center justify-center shadow-lg shadow-cyan-950/60">
-        <i data-lucide="library" class="w-5 h-5 text-cyan-300"></i>
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#500505] via-[#200407] to-[#880808] border border-red-500/40 flex items-center justify-center shadow-lg shadow-red-950/60">
+        <i data-lucide="book-marked" class="w-5 h-5 text-red-200"></i>
       </div>
       <div>
-        <h1 class="font-cinzel text-base sm:text-lg font-bold text-slate-100 tracking-wider uppercase">Portfolio Library</h1>
-        <p class="text-xs text-cyan-300/70 tracking-widest uppercase">By American Author Hub</p>
+        <div class="flex items-center space-x-2">
+          <span class="font-cinzel text-sm sm:text-base font-black text-white tracking-widest uppercase">AMERICAN AUTHOR HUB</span>
+        </div>
+        <p class="text-[10px] text-amber-200/80 tracking-widest uppercase font-semibold">Interactive 3D Portfolio Library</p>
       </div>
     </div>
 
     <div class="flex items-center space-x-3 text-xs">
-      <span class="hidden sm:inline-flex items-center px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-400">
-        <i data-lucide="book-open" class="w-3.5 h-3.5 mr-1.5 text-cyan-400"></i> 5 Volumes (Embedded Offline)
+      <span class="hidden sm:inline-flex items-center px-3 py-1 rounded-full bg-red-950/40 border border-red-900/40 text-red-200">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5 mr-1.5 text-amber-400"></i> 5 Published Works
       </span>
-      <button id="infoBtn" class="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-slate-200 transition flex items-center space-x-1.5">
-        <i data-lucide="info" class="w-3.5 h-3.5 text-cyan-400"></i>
-        <span>Guide</span>
+      <button id="infoBtn" class="px-3 py-1.5 rounded-lg border border-red-900/50 bg-[#160608] hover:bg-red-950 text-slate-200 transition flex items-center space-x-1.5 shadow-sm">
+        <i data-lucide="info" class="w-3.5 h-3.5 text-red-400"></i>
+        <span>Reader Guide</span>
       </button>
     </div>
   </header>
@@ -95,19 +112,27 @@
   <!-- Main Hero & Book Grid -->
   <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 py-10 sm:py-14 flex-1 flex flex-col justify-center">
     
-    <!-- Hero Title -->
-    <div class="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-      <span class="text-[11px] font-semibold uppercase tracking-[0.3em] text-cyan-400 bg-cyan-950/50 border border-cyan-800/40 px-3.5 py-1 rounded-full inline-block mb-3">
-        Select a Title to Read
-      </span>
-      <h2 class="font-playfair text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
+    <!-- Hero Title (American Author Hub Themed) -->
+    <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+      <div class="inline-flex items-center space-x-2 px-4 py-1 rounded-full bg-red-950/60 border border-red-800/50 text-[11px] font-semibold uppercase tracking-[0.25em] text-red-200 mb-4 shadow-md shadow-red-950/50">
+        <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+        <span>Curated Author Showcase</span>
+      </div>
+      
+      <h2 class="font-playfair text-3xl sm:text-5xl md:text-6xl font-black text-white tracking-tight leading-tight">
         Interactive 3D Portfolio
       </h2>
-        <h2 class="font-playfair text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-tight">
-        <span class="text-[#880808]">American Author Hub</span>
-      </h2>
-      <p class="text-slate-400 text-xs sm:text-sm mt-3 font-normal max-w-xl mx-auto leading-relaxed">
-        Click any book cover below to instantly launch its 3D double-sided reading experience. All books are completely embedded—no internet or extra files needed.
+      
+      <div class="flex items-center justify-center space-x-3 my-3">
+        <div class="w-16 h-px bg-gradient-to-r from-transparent to-[#880808]"></div>
+        <span class="font-cinzel text-lg sm:text-2xl font-bold tracking-widest text-[#e04040]">
+          American Author Hub
+        </span>
+        <div class="w-16 h-px bg-gradient-to-l from-transparent to-[#880808]"></div>
+      </div>
+
+      <p class="text-stone-300 text-xs sm:text-sm mt-2 font-normal max-w-xl mx-auto leading-relaxed">
+        Click any book cover to launch its interactive 3D reading experience with realistic page turns, synthesized audio, and double-sided spreads.
       </p>
     </div>
 
@@ -265,9 +290,9 @@
   <!-- Interactive Reader Modal / Fullscreen Viewer -->
   <div id="readerModal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-lg hidden flex-col">
     <!-- Reader Top Bar -->
-    <div class="px-4 sm:px-8 py-3 border-b border-slate-800 bg-slate-950/80 flex items-center justify-between text-xs font-ui">
+    <div class="px-4 sm:px-8 py-3 border-b border-red-900/40 bg-black/90 flex items-center justify-between text-xs font-ui">
       <div class="flex items-center space-x-3">
-        <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse shadow-sm shadow-red-500"></span>
         <span id="modalBookTitle" class="font-bold text-slate-200 text-sm">Book Title</span>
       </div>
 
@@ -287,13 +312,13 @@
 
   <!-- Info / Help Modal -->
   <div id="infoModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
-    <div class="bg-slate-900 border border-cyan-500/30 rounded-2xl max-w-md w-full p-6 text-slate-300 relative shadow-2xl">
+    <div class="bg-slate-900 border border-red-500/30 rounded-2xl max-w-md w-full p-6 text-slate-300 relative shadow-2xl bg-[#120507]">
       <button id="closeInfoBtn" class="absolute top-4 right-4 text-slate-400 hover:text-white">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
       <div class="flex items-center space-x-3 mb-4">
-        <div class="p-2 rounded-lg bg-cyan-950 border border-cyan-500/40 text-cyan-400">
+        <div class="p-2 rounded-lg bg-red-950 border border-red-500/40 text-red-400">
           <i data-lucide="help-circle" class="w-6 h-6"></i>
         </div>
         <div>
@@ -304,15 +329,15 @@
 
       <div class="space-y-3 text-xs leading-relaxed">
         <div class="p-3 rounded-lg bg-slate-950/60 border border-slate-800 flex items-start space-x-2.5">
-          <i data-lucide="mouse-pointer-click" class="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5"></i>
+          <i data-lucide="mouse-pointer-click" class="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5"></i>
           <p><strong>Click Any Page Edge:</strong> Click the right edge of any page spread to turn forward, or the left edge to turn backward.</p>
         </div>
         <div class="p-3 rounded-lg bg-slate-950/60 border border-slate-800 flex items-start space-x-2.5">
-          <i data-lucide="keyboard" class="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5"></i>
+          <i data-lucide="keyboard" class="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5"></i>
           <p><strong>Keyboard Shortcuts:</strong> Use <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-200">Space</kbd> or <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-200">&rarr;</kbd> to turn forward, and <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-200">&larr;</kbd> to go back.</p>
         </div>
         <div class="p-3 rounded-lg bg-slate-950/60 border border-slate-800 flex items-start space-x-2.5">
-          <i data-lucide="rotate-ccw" class="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5"></i>
+          <i data-lucide="rotate-ccw" class="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5"></i>
           <p><strong>Back Cover Reset:</strong> Reaching the back cover allows you to click the center restart button to flip directly back to the front.</p>
         </div>
       </div>
@@ -320,7 +345,6 @@
   </div>
 
   <!-- EMBEDDED TEMPLATES (All books are inline inside this single file) -->
-  
 <template id="template-journey">
 <!DOCTYPE html>
 <html lang="en">
@@ -996,7 +1020,11 @@
         if (s.alpha > 1 || s.alpha < 0.2) s.speed = -s.speed;
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(186, 230, 253, ${Math.abs(s.alpha)})`;
+        // Warm brand gold & crimson stardust particles
+        const isGold = (s.radius > 1.0);
+        ctx.fillStyle = isGold 
+          ? `rgba(235, 195, 130, ${Math.abs(s.alpha) * 0.85})` 
+          : `rgba(220, 60, 60, ${Math.abs(s.alpha) * 0.75})`;
         ctx.fill();
       });
       requestAnimationFrame(animateStars);
@@ -5106,10 +5134,8 @@
 </body>
 </html>
 </template>
-
-
   <!-- Footer -->
-  <footer class="relative z-10 px-6 py-4 border-t border-slate-900 bg-slate-950/70 text-center text-xs text-slate-500">
+  <footer class="relative z-10 px-6 py-4 border-t border-red-950 bg-black/80 text-center text-xs text-stone-500">
     Interactive 3D Portfolio Reader Collection &bull; All Rights Reserved &copy; 2026
   </footer>
 
@@ -5144,7 +5170,11 @@
         if (s.alpha > 0.95 || s.alpha < 0.2) s.speed = -s.speed;
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(186, 230, 253, ${Math.abs(s.alpha)})`;
+        // Warm brand gold & crimson stardust particles
+        const isGold = (s.radius > 1.0);
+        ctx.fillStyle = isGold 
+          ? `rgba(235, 195, 130, ${Math.abs(s.alpha) * 0.85})` 
+          : `rgba(220, 60, 60, ${Math.abs(s.alpha) * 0.75})`;
         ctx.fill();
       });
       requestAnimationFrame(animateCanvas);
