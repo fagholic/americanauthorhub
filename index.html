@@ -394,27 +394,30 @@
       width: 100%;
       height: 100%;
       transform-origin: left center;
-      transition: transform 0.95s cubic-bezier(0.645, 0.045, 0.355, 1);
+      transition: transform 0.85s cubic-bezier(0.645, 0.045, 0.355, 1);
       transform-style: preserve-3d;
-      border-radius: 2px 7px 7px 2px;
+      border-radius: 4px 10px 10px 4px;
       cursor: pointer;
+    }
+
+    .sheet.flipped {
+      transform: rotateY(-180deg);
     }
 
     .sheet-face {
       position: absolute;
       inset: 0;
+      width: 100%;
+      height: 100%;
       backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
       overflow: hidden;
-      border-radius: 2px 7px 7px 2px;
+      border-radius: 4px 10px 10px 4px;
     }
 
     .sheet-face.back {
       transform: rotateY(180deg);
-      border-radius: 7px 2px 2px 7px;
-    }
-
-    .sheet.flipped {
-      transform: rotateY(-180deg);
+      border-radius: 10px 4px 4px 10px;
     }
 
     /* Inner Paper Textures & Spine Crease */
@@ -508,7 +511,7 @@
 
         <!-- SHEET 0: FRONT COVER -->
         <div class="sheet" id="sheet-0" style="z-index: 10;">
-          <div class="sheet-face front bg-[#050b16] text-white p-6 sm:p-7 flex flex-col justify-between border-r border-t border-b border-cyan-400/30 shadow-2xl relative overflow-hidden group">
+          <div class="sheet-face front bg-[#050b16] text-white p-6 sm:p-7 flex flex-col justify-between border-2 border-cyan-400/40 shadow-2xl relative overflow-hidden group">
             <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_48%,rgba(14,165,233,0.32)_0%,rgba(15,23,42,0.95)_70%,#030712_100%)] pointer-events-none"></div>
 
             <div class="absolute top-4 left-4 sm:top-5 sm:left-5 w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-tr from-[#5a1a11] via-[#c2410c] to-[#f97316] shadow-lg shadow-orange-950/80 border border-orange-400/30 flex items-center justify-center opacity-90 overflow-hidden">
@@ -821,7 +824,7 @@
           </div>
 
           <!-- Back Cover -->
-          <div class="sheet-face back bg-[#050b16] text-white p-6 sm:p-7 flex flex-col justify-between border-l border-t border-b border-cyan-400/30 shadow-2xl relative overflow-hidden group">
+          <div class="sheet-face back bg-[#050b16] text-white p-6 sm:p-7 flex flex-col justify-between border-2 border-cyan-400/40 shadow-2xl relative overflow-hidden group">
             <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(14,165,233,0.25)_0%,rgba(15,23,42,0.98)_65%,#020617_100%)] pointer-events-none"></div>
 
             <div class="absolute top-3 left-3 w-10 h-10 rounded-full bg-gradient-to-tr from-[#5a1a11] via-[#c2410c] to-[#f97316] shadow-md border border-orange-400/30 opacity-70"></div>
@@ -1080,6 +1083,7 @@
 
     function renderBook() {
       sheets.forEach((sheet, idx) => {
+        sheet.style.transform = '';
         if (idx < currentSheet) {
           sheet.classList.add('flipped');
           sheet.style.zIndex = idx + 1;
@@ -1089,21 +1093,20 @@
         }
       });
 
-      const isDesktop = window.innerWidth >= 768;
-
       if (currentSheet === 0) {
-        // Centered front cover
-        book.style.transform = 'translateX(0%)';
+        // Front Cover: single closed book centered
+        book.style.transform = 'translateX(-50%)';
         pageLabel.textContent = 'Cover • 0 / ' + totalSheets;
         turnNotice.style.opacity = '1';
       } else if (currentSheet === totalSheets) {
-        // Centered back cover (accounting for the leftward flip)
-        book.style.transform = isDesktop ? 'translateX(50%)' : 'translateX(0%)';
+        // Back Cover: single closed book centered, fully covering prior pages
+        book.style.transform = 'translateX(50%)';
         pageLabel.textContent = 'Back Cover • ' + totalSheets + ' / ' + totalSheets;
         turnNotice.style.opacity = '0';
+        sheets[totalSheets - 1].style.zIndex = 100;
       } else {
-        // Open two-page spread shift to center the spine
-        book.style.transform = isDesktop ? 'translateX(50%)' : 'translateX(0%)';
+        // Open two-page spread: centered on spine
+        book.style.transform = 'translateX(0%)';
         pageLabel.textContent = `Pages ${currentSheet * 2 - 1}-${currentSheet * 2} • ${currentSheet} / ${totalSheets}`;
         turnNotice.style.opacity = '0';
       }
